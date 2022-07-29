@@ -1,7 +1,6 @@
 package ru.sergio.kanji.dictionary.cnn;
 
 import ai.djl.Application;
-import ai.djl.basicmodelzoo.BasicModelZoo;
 import ai.djl.modality.Classifications;
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.ImageFactory;
@@ -17,32 +16,18 @@ import ai.djl.nn.core.Linear;
 import ai.djl.nn.norm.Dropout;
 import ai.djl.nn.pooling.Pool;
 import ai.djl.repository.zoo.Criteria;
-import ai.djl.repository.zoo.DefaultModelZoo;
-import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.translate.Translator;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.file.PathUtils;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.PathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
 
-import javax.annotation.PostConstruct;
 import java.awt.image.BufferedImage;
-import java.io.*;
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.File;
+import java.io.InputStream;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -51,8 +36,6 @@ public class KanjiCnn {
 
     private final KanjiTranslator kanjiTranslator;
 
-    @Value("classpath:models")
-    private Resource resource;
 
     @SneakyThrows
     public Classifications predict(String modelName, BufferedImage bufferedImage) {
@@ -63,12 +46,16 @@ public class KanjiCnn {
                         .optSynset(classNames)
                         .build();
 
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("models/test_kanji_model_2-0000.params");
+        File file = new File("models/test_kanji_model_2-0000.params");
+        FileUtils.copyInputStreamToFile(inputStream, file);
+
         Criteria<Image, Classifications> criteria = Criteria.builder()
                 .optApplication(Application.CV.OBJECT_DETECTION)
                 .setTypes(Image.class, Classifications.class)
-                .optBlock(getCnn()) // set the block in criteria
-                //.optModelPath(ResourceUtils.getFile("classpath:models").toPath())
-                .optModelName(resource.getURI().getRawSchemeSpecificPart() + "/" + modelName)// specify the parameter file name
+                .optBlock(getCnn())
+                .optModelPath(file.getParentFile().toPath())
+                .optModelName(modelName)
                 .optTranslator(translator)
                 .build();
 
