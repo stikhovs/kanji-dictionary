@@ -1,0 +1,56 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.1'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+}
+
+group 'ru.sergio.kanji.dictionary'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter:2.7.1'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.7.1'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator:2.7.1'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.1'
+
+    implementation 'org.postgresql:postgresql:42.4.0'
+
+
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+    implementation 'org.mapstruct:mapstruct:1.5.2.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
+    implementation 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+
+
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'commons-io:commons-io:2.11.0'
+
+
+    implementation 'ai.djl:api:0.17.0'
+    implementation 'ai.djl.mxnet:mxnet-engine:0.17.0'
+    implementation 'ai.djl.mxnet:mxnet-model-zoo:0.17.0'
+    implementation 'ai.djl:model-zoo:0.17.0'
+    implementation 'ai.djl:basicdataset:0.17.0'
+    //runtimeOnly 'ai.djl.mxnet:mxnet-native-auto:1.8.0'
+
+    
+    implementation 'org.imgscalr:imgscalr-lib:4.2'
+
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+test {
+    useJUnitPlatform()
+}
