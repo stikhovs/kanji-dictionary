@@ -1,12 +1,12 @@
 server:
-  port: 8080
+  port: ${PORT}
 spring:
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/kanjidataset
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://${DATABASE_URL_CUSTOM}
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
     driver-class-name: org.postgresql.Driver
